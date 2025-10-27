@@ -80,7 +80,8 @@ namespace SearcherXX1
                             Parallel.ForEach(dirs, dir =>
                             {
                                 stack.Push(dir);
-                                if (dir.Contains(search) && !results.Contains(dir))
+                                string folderName = Path.GetFileName(dir);
+                                if (folderName.Contains(search))
                                 {
                                     results.Add(dir);
                                 }
@@ -95,8 +96,8 @@ namespace SearcherXX1
                             files = Directory.GetFiles(current);
                             Parallel.ForEach(files, file =>
                             {
-                                file = file.Replace("\r", "");
-                                if (file.Contains(search) && !results.Contains(file))
+                                file = Path.GetFileName(file.Replace("\r", ""));
+                                if (file.Contains(search))
                                 {
                                     results.Add(file);
                                 }
