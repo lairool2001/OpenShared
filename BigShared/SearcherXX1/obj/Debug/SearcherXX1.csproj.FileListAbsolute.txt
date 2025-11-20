@@ -20,3 +20,10 @@ H:\Fork\OpenShared\BigShared\SearcherXX1\obj\Debug\SearcherXX1.csproj.GenerateRe
 H:\Fork\OpenShared\BigShared\SearcherXX1\obj\Debug\SearcherXX1.csproj.CoreCompileInputs.cache
 H:\Fork\OpenShared\BigShared\SearcherXX1\obj\Debug\SearcherXX1.exe
 H:\Fork\OpenShared\BigShared\SearcherXX1\obj\Debug\SearcherXX1.pdb
+H:\Fork\OpenShared\BigShared\SearcherXX1\bin\Debug\System.Buffers.dll
+H:\Fork\OpenShared\BigShared\SearcherXX1\bin\Debug\System.Numerics.Vectors.dll
+H:\Fork\OpenShared\BigShared\SearcherXX1\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+H:\Fork\OpenShared\BigShared\SearcherXX1\bin\Debug\System.Buffers.xml
+H:\Fork\OpenShared\BigShared\SearcherXX1\bin\Debug\System.Numerics.Vectors.xml
+H:\Fork\OpenShared\BigShared\SearcherXX1\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+H:\Fork\OpenShared\BigShared\SearcherXX1\obj\Debug\Searcher.1937D937.Up2Date

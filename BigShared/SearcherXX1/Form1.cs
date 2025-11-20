@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -32,6 +31,13 @@ namespace SearcherXX1
 
             });
         }
+        [StructLayout(LayoutKind.Sequential)]
+        struct MFT_ENUM_DATA
+        {
+            public ulong StartFileReferenceNumber;
+            public ulong LowUsn;
+            public ulong HighUsn;
+        }
 
         private async Task DoJob(string search)
         {
@@ -39,75 +45,78 @@ namespace SearcherXX1
             DriveInfo[] drives = DriveInfo.GetDrives();
 
             // 組裝結果的本地容器，最後一次性放到 UI
-            var results = new ConcurrentBag<string>();
+            var results = new ConcurrentDictionary<string, byte>();
 
             Parallel.ForEach(drives, d =>
             {
-                if (d.DriveFormat == "NTFS")
-                {
-                    return;
-                }
-                //foreach (var d in drives)
-                //{
                 try
                 {
-                    // 先寫入盤名
-                    //results.Add($"Name: {d.Name}");
-
-                    // 取得該磁碟根目錄的檔案清單，這裡用安全的例外處理
-                    string[] rootFiles = Directory.GetFiles(d.Name);
-                    Parallel.ForEach(rootFiles, file =>
+                    //NTFS有MET
+                    if (d.DriveFormat == "NTFS")
                     {
-                        if (file.Contains(search))
-                        {
-                            results.Add(file);
-                        }
-                    });
-
-                    // 以堆疊方式遞迴掃描子目錄，避免同時修改同一併發集合
-                    var stack = new ConcurrentStack<string>();
-                    stack.Push(d.Name);
-
-                    while (stack.Count > 0)
+                        NtfsSearcher.SearchDeepFull(d.Name, search, results, ignore);
+                        return;
+                    }
+                    //非NTFS
+                    else
                     {
-                        stack.TryPop(out var current);
-                        string[] dirs = null;
-                        string[] files = null;
+                        // 先寫入盤名
+                        //results.Add($"Name: {d.Name}");
 
-                        try
+                        // 取得該磁碟根目錄的檔案清單，這裡用安全的例外處理
+                        string[] rootFiles = Directory.GetFiles(d.Name);
+                        Parallel.ForEach(rootFiles, file =>
                         {
-                            dirs = Directory.GetDirectories(current);
-                            Parallel.ForEach(dirs, dir =>
+                            if (file.myContains(search, ignore))
                             {
-                                stack.Push(dir);
-                                string folderName = Path.GetFileName(dir);
-                                if (folderName.Contains(search))
-                                {
-                                    results.Add(dir);
-                                }
-                            });
-                        }
-                        catch
-                        {
-                            // 忽略無法存取的目錄/檔案
-                        }
-                        try
-                        {
-                            files = Directory.GetFiles(current);
-                            Parallel.ForEach(files, file =>
-                            {
-                                file = Path.GetFileName(file.Replace("\r", ""));
-                                if (file.Contains(search))
-                                {
-                                    results.Add(file);
-                                }
-                            });
-                        }
-                        catch
-                        {
-                            // 忽略無法存取的目錄/檔案
-                        }
+                                results[file] = 0;
+                            }
+                        });
 
+                        // 以堆疊方式遞迴掃描子目錄，避免同時修改同一併發集合
+                        var stack = new ConcurrentStack<string>();
+                        stack.Push(d.Name);
+
+                        while (stack.Count > 0)
+                        {
+                            stack.TryPop(out var current);
+                            string[] dirs = null;
+                            string[] files = null;
+
+                            try
+                            {
+                                dirs = Directory.GetDirectories(current);
+                                Parallel.ForEach(dirs, dir =>
+                                {
+                                    stack.Push(dir);
+                                    string folderName = Path.GetFileName(dir);
+                                    if (folderName.myContains(search, ignore))
+                                    {
+                                        results[dir] = 0;
+                                    }
+                                });
+                            }
+                            catch
+                            {
+                                // 忽略無法存取的目錄/檔案
+                            }
+                            try
+                            {
+                                files = Directory.GetFiles(current);
+                                Parallel.ForEach(files, file =>
+                                {
+                                    string fileName = Path.GetFileName(file.Replace("\r", ""));
+                                    if (fileName.myContains(search, ignore))
+                                    {
+                                        results[file] = 0;
+                                    }
+                                });
+                            }
+                            catch
+                            {
+                                // 忽略無法存取的目錄/檔案
+                            }
+                        }
                     }
                 }
                 catch
@@ -115,15 +124,22 @@ namespace SearcherXX1
                     // 忽略無法存取的磁碟
                 }
             });
+            //將結果轉成單一字串後顯示
+            string resultAll = string.Join("\n", results.Keys) + $"\n共{results.Count}筆";
+            File.WriteAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"T={DateTime.Now:yyyy-MM-dd-tt-hh-mm-ss-fff}-S={search}-C={results.Count}.txt"), resultAll);
             //
             Invoke(new Action(() =>
             {
                 richTextBox2.Clear();
-                // 將結果轉成單一字串後顯示
-                foreach (var item in results)
+                richTextBox2.AppendText(resultAll);
+                richTextBox2.ScrollToCaret();
+                /*foreach (var item in results)
                 {
-                    InsertFileLink(richTextBox2, item);
-                }
+                    //richTextBox2.AppendText(item.Key);
+                    //richTextBox2.AppendText(Environment.NewLine);
+
+                    //InsertFileLink(richTextBox2, item.Key);
+                }*/
                 //richTextBox2.ScrollToCaret();
             }));
         }
@@ -134,7 +150,7 @@ namespace SearcherXX1
             for (int i = 0; i < richTextBox2.Lines.Length; i++)
             {
                 string line = richTextBox2.Lines[i];
-                if(line==link)
+                if (line == link)
                 {
                     richTextBox2.Select(richTextBox2.GetFirstCharIndexFromLine(i), line.Length);
                     break;
@@ -145,7 +161,14 @@ namespace SearcherXX1
             try
             {
                 // Use Process.Start to open the linked file
-                System.Diagnostics.Process.Start(link);
+                if (File.Exists(link))
+                {
+                    System.Diagnostics.Process.Start(link);
+                }
+                else if (Directory.Exists(link))
+                {
+                    System.Diagnostics.Process.Start("explorer.exe", link);
+                }
                 Focus();
             }
             catch (Exception ex)
@@ -172,7 +195,7 @@ namespace SearcherXX1
             // 記住插入位置並加入文字
             int start = rtb.TextLength;
             rtb.AppendText(displayText);
-            rtb.AppendText("\n\n");
+            rtb.AppendText("\n");
 
             // 選取剛加入的文字範圍
             rtb.Select(start, displayText.Length);
@@ -238,6 +261,25 @@ namespace SearcherXX1
 
         private void richTextBox2_MouseDown(object sender, MouseEventArgs e)
         {
+        }
+        bool ignore = false;
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            ignore = !checkBox1.Checked;
+        }
+    }
+    public static class ExString
+    {
+        public static bool myContains(this string source, string search, bool ignore)
+        {
+            if (ignore)
+            {
+                return source.IndexOf(search, StringComparison.OrdinalIgnoreCase) != -1;
+            }
+            else
+            {
+                return source.Contains(search);
+            }
         }
     }
 }
