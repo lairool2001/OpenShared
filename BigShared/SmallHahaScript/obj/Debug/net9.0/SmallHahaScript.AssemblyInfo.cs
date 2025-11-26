@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SmallHahaScript")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cbb0f63c024a9da234f54701c3769f4fe3d111e3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e4da53b429a95742726c8bf94a117fefe569e228")]
 [assembly: System.Reflection.AssemblyProductAttribute("SmallHahaScript")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SmallHahaScript")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

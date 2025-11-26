@@ -27,3 +27,4 @@ H:\Fork\OpenShared\BigShared\SearcherXX1\bin\Debug\System.Buffers.xml
 H:\Fork\OpenShared\BigShared\SearcherXX1\bin\Debug\System.Numerics.Vectors.xml
 H:\Fork\OpenShared\BigShared\SearcherXX1\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
 H:\Fork\OpenShared\BigShared\SearcherXX1\obj\Debug\Searcher.1937D937.Up2Date
+H:\Fork\OpenShared\BigShared\SearcherXX1\bin\Debug\的圖片 (2)_ico_256x256.ico
