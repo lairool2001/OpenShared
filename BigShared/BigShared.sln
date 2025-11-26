@@ -1,11 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36603.0 d17.14
+VisualStudioVersion = 17.14.36603.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AVG", "BigShared\AVG.csproj", "{40EBBF5E-F9D2-4A72-B89D-822FB8E76DBD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearcherXX1", "SearcherXX1\SearcherXX1.csproj", "{AC00BD00-2CF0-486D-B756-AAE4DB2E4ACB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Translator", "Translator\Translator.csproj", "{8941C017-8DF1-467D-AE24-3D42A5A7A2EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmallHahaScript", "SmallHahaScript\SmallHahaScript.csproj", "{121DE87C-861C-4DF5-BE85-964E24BDCAF4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{AC00BD00-2CF0-486D-B756-AAE4DB2E4ACB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC00BD00-2CF0-486D-B756-AAE4DB2E4ACB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC00BD00-2CF0-486D-B756-AAE4DB2E4ACB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8941C017-8DF1-467D-AE24-3D42A5A7A2EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8941C017-8DF1-467D-AE24-3D42A5A7A2EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8941C017-8DF1-467D-AE24-3D42A5A7A2EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8941C017-8DF1-467D-AE24-3D42A5A7A2EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{121DE87C-861C-4DF5-BE85-964E24BDCAF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{121DE87C-861C-4DF5-BE85-964E24BDCAF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{121DE87C-861C-4DF5-BE85-964E24BDCAF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{121DE87C-861C-4DF5-BE85-964E24BDCAF4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
